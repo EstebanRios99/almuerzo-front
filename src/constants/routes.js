@@ -1,17 +1,27 @@
+/**
+ * Created by chalosalvador on 17/01/2019.
+ */
+
 const publicRoutes = {
-    LOGIN: '/ingreso',
-    HOME: '/',
+  LOGIN: '/ingreso',
+  REGISTER: '/registro',
+  USERS: '/usuarios',
+  USERS_ID: `/usuario/:id`,
+  HOME: '/',
+  ABOUT: '/acerca-de',
+  ANTD: '/antd',
+  PROFILE: '/perfil',
 };
 
 const privateRoutes = {
-    LOGOUT: '/logout',
-    REGISTERS: '/registros',
-    REGISTER_EMPLOY: '/registros/:identification'
+  LOGOUT: '/logout',
+  PRIVATE: '/privada',
+  REGISTERS: '/registros',
+  REGISTER: '/registro_usuario',
 };
 
 const Routes = {
-    ...publicRoutes,
-    ...privateRoutes
+  ...publicRoutes,
+  ...privateRoutes
 };
-
 export default Routes;

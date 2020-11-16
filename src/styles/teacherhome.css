@@ -1,0 +1,15 @@
+.teacher{
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+.botones{
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+}
+.title{
+    background: #EBFBFF;
+}
+.listCourses{
+    color:#ff4d4f;
+}

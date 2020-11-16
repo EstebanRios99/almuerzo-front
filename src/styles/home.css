@@ -1,0 +1,35 @@
+.options{
+    background:#D86328;
+    font-weight: bold;
+    width:100%;
+}
+.signatures{
+    color:#000000;
+}
+.about{
+    background:#CCCCCC;
+    padding: 15px;
+}
+.title{
+    font-weight: bold;
+    text-align: center;
+}
+.why{
+    background: #33CEFF;
+}
+.trial{
+    text-align: center;
+    padding: 10px;
+}
+.moreThing{
+    background: #C4C4C4;
+}
+.mathematics{
+    background:#45BAF9;
+}
+.language{
+    background:#FC7E80;
+}
+.biology{
+    background:#17EE2F;
+}
