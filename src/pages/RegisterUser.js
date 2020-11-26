@@ -59,47 +59,9 @@ const RegisterUser = () => {
         }
     };
 
-
-    const handleStudent = () => {
-        const role = 'ROLE_STUDENT'
-        setRole(''+role);
-        setShow(false);
-        console.log(role);
-    };
-    const handleTeacher = () => {
-        const role = 'ROLE_TEACHER'
-        setShow(false);
-        setRole(''+role);
-        console.log(role);
-    }
-
     return (
         <>
-            <Modal
-                visible={show}
-                title='Bienvenido A Trial Q'
-                closable={false}
-                footer={null}
-            >
-
-                <div style={{textAling: 'center'}}>
-                    <h2>Dinos quién Eres</h2>
-                </div>
-                <div>
-                    <button className='student'><img alt='Students' src={students} onClick={handleStudent} /></button>
-                    <button className='teacher'><img alt='Teachers' src={teachers} onClick={handleTeacher}/></button>
-                </div>
-                <div style={{textAlign: 'center'}}>
-                    <Row>
-                        <Col span={10}><h3>Soy Estudiante</h3></Col>
-                        <Col span={14}><h3>Soy Maestro</h3></Col>
-                    </Row>
-                </div>
-                <div style={{textAlign: 'center'}}>
-                    <Link to={Routes.HOME}><Button type="primary" style={{margin: 8}}>Cancelar</Button></Link>
-                    <Link to={Routes.LOGIN}> Ya tengo una Cuenta... Iniciar Sesión</Link>
-                </div>
-            </Modal>
+            
             <Title style={{textAlign: 'center'}}>Registro</Title>
             <Row justify='center' className='login'>
                 <Col span={8}>
@@ -190,7 +152,6 @@ const RegisterUser = () => {
                             <Button type='primary' htmlType='submit' className='login-form-button'>
                                 Registrarme
                             </Button>
-                            <div><Link to={Routes.LOGIN}>Ya tengo una cuenta</Link></div>
                         </Form.Item>
                     </Form>
                 </Col>
