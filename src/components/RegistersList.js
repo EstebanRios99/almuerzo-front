@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Skeleton, Card, Table, Col, Row} from 'antd';
+import {Skeleton, Card, Table, Col, Row, Input} from 'antd';
 import {useRegisters} from '../data/useRegisters';
 import ShowError from './ShowError';
 import {useAuth} from "../providers/Auth";
@@ -11,7 +11,7 @@ import Column from 'antd/lib/table/Column';
 
 const RegistersList = (props) => {
 
-    
+    const { Search } = Input;
     const {currentUser} = useAuth();
     const {employsRegisters, isLoading, isError, mutate} = useRegisters();
     
@@ -83,8 +83,11 @@ const RegistersList = (props) => {
     }
 
     return (
-        <>            
-            <Table dataSource={data} size="small"  bordered="true">
+        <>
+            <Search placeholder="input search text"  enterButton  style={{ width: 700 }} size="middle"/>
+            <br/>
+            <br/>
+            <Table dataSource={data} size="small"  bordered="true" color="primary">
             <Column title="Fecha" dataIndex="date" key="date" />
                 <ColumnGroup title="Nombres">
                     <Column title="Nombre" dataIndex="name" key="name" />
