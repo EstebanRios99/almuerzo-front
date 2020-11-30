@@ -4,8 +4,7 @@
 import { useAuth } from '../providers/Auth';
 import Loading from '../components/Loading';
 import React from 'react';
-import Auth from '../data/auth';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Routes from '../constants/routes';
 
 /**
@@ -28,7 +27,7 @@ export default function withAuthRedirect( {
 } ) {
   const WithAuthRedirectWrapper = props => {
 
-    const { currentUser, isCheckingAuth, isAuthenticated } = useAuth();
+    const { isCheckingAuth, isAuthenticated } = useAuth();
     if( isCheckingAuth ) {
       return <LoadingComponent />;
     }

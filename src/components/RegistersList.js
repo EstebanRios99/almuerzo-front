@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Skeleton, Card, Table, Col, Row, Input} from 'antd';
+import {Button, message, Skeleton, Card, Table, Col, Row, Input, Form} from 'antd';
 import {useRegisters} from '../data/useRegisters';
 import ShowError from './ShowError';
 import {useAuth} from "../providers/Auth";
 import ColumnGroup from 'antd/lib/table/ColumnGroup';
 import Column from 'antd/lib/table/Column';
+import API from '../data/index';
+import ErrorList from '../components/ErrorList';
+import {translateMessage} from '../utils/translateMessage';
 
 
 
@@ -15,6 +18,38 @@ const RegistersList = (props) => {
     const {currentUser} = useAuth();
     const {employsRegisters, isLoading, isError, mutate} = useRegisters();
     
+    const onFinish = async (registerData) => {
+        console.log('Received values of form: ', registerData);
+        const {checkIn, checkOut, employ_id} = registerData;
+        const test = employsRegisters[employsRegisters.length-1];
+
+        try {
+            if(checkOut==="")
+            {
+                const register = await API.post('/registers', {
+                checkIn,
+                checkOut,
+                employ_id,
+                });
+                console.log('employ_register', register);
+                console.log('employ', test);
+            }else{
+                await API.put(`/registers/${test.id}`, {
+                    checkIn,
+                    checkOut,
+                    employ_id,
+                    });
+            }
+            afterCreate();
+
+        } catch (e) {
+            console.error('No se pudo registrar', e);
+            const errorList = e.error && <ErrorList errors={e.error}/>;
+            message.error(<>{translateMessage(e.message)}{errorList}</>);
+        }
+
+    };
+
     if (isLoading) {
         return <Row>
             {
@@ -39,34 +74,6 @@ const RegistersList = (props) => {
         await mutate('/registers');
     };
 
-    const columns = [
-        {
-            title: 'Fecha',
-            dataIndex: 'date',
-            key:'date',
-        },
-        {
-            title: 'Nombre',
-            dataIndex: 'name',
-            key:'name',
-        },
-        {
-            title: 'Apellido',
-            dataIndex: 'lastname',
-            key:'lastname',
-        },
-        {
-            title: 'Ingreso',
-            dataIndex: 'checkIn',
-            key:'checkIn',
-        },
-        {
-            title: 'Salida',
-            dataIndex: 'checkOut',
-            key:'checkOut',
-        },
-        
-    ];
     let data=null;
     if(employsRegisters){
     data = employsRegisters.map((registers,index)=>{
@@ -84,6 +91,28 @@ const RegistersList = (props) => {
 
     return (
         <>
+        <Form
+            onFinish={onFinish}
+        >
+            <Form.Item name='checkIn'>
+                <Input type="time" placeholder="Ingreso" />
+            </Form.Item>
+
+            <Form.Item name='checkOut'>
+                <Input type="time" placeholder="Salida" />
+            </Form.Item>
+
+            <Form.Item name='employ_id'>
+                <Input type="number" placeholder="Empleado" />
+            </Form.Item>
+
+            <Form.Item>
+            <Button type='primary' htmlType='submit' className='login-form-button'>
+                Agregar
+            </Button>
+            </Form.Item>
+        </Form>
+
             <Search placeholder="input search text"  enterButton  style={{ width: 700 }} size="middle"/>
             <br/>
             <br/>

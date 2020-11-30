@@ -24,7 +24,6 @@ const AsyncHome = loadable(() => import( '../pages/Index' ), loadableOptions);
 const AsyncLogin = loadable(() => import( '../pages/Login' ), loadableOptions);
 const AsyncRegisters = loadable(() => import( '../pages/Register' ), loadableOptions);
 const AsyncRegister = loadable(() => import ('../pages/RegisterUser'),loadableOptions);
-const AsyncPrivate = loadable(() => import( '../pages/Private' ), loadableOptions);
 const AsyncAbout = loadable(() => import( '../pages/About' ), loadableOptions);
 const AsyncLogout = loadable(() => import( '../pages/Logout' ), loadableOptions);
 
@@ -46,7 +45,7 @@ const AppRouter = () => (
         <PublicRoute path={Routes.ABOUT} component={AsyncAbout}/>
 
 
-        <PrivateRoute path={Routes.PRIVATE} component={AsyncPrivate}/>
+        
         <PrivateRoute path={Routes.REGISTERS} component={AsyncRegisters}/>
         <PrivateRoute path={Routes.REGISTER} component={AsyncRegister}/>
         <PrivateRoute path={Routes.LOGOUT} component={AsyncLogout}/>

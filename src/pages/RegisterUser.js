@@ -1,22 +1,16 @@
-import React, {useState} from 'react';
-import Routes from '../constants/routes';
+import React from 'react';
+//import Routes from '../constants/routes';
 import API from '../data/index';
-import {Button, Col, Form, Input, message, Modal, Row, Typography} from 'antd';
+import {Button, Col, Form, Input, message, Row, Typography} from 'antd';
 import {
     LockOutlined,
     UserOutlined,
     MailOutlined,
-    EditOutlined,
-    FileTextOutlined,
-    CloseOutlined
 } from '@ant-design/icons';
 import ErrorList from '../components/ErrorList';
 import {translateMessage} from '../utils/translateMessage';
-import withoutAuth from '../hocs/withoutAuth';
+//import withoutAuth from '../hocs/withoutAuth';
 import '../styles/register.css';
-import {Link} from 'react-router-dom';
-import students from '../images/studying.png';
-import teachers from '../images/education-teacher.png';
 import Cookies from 'js-cookie';
 import {useAuth} from '../providers/Auth';
 import {EyeInvisibleOutlined, EyeTwoTone} from '@ant-design/icons/lib';
@@ -26,8 +20,7 @@ const {Title} = Typography;
 const RegisterUser = () => {
 
     const {setAuthenticated, setCurrentUser} = useAuth();
-    const [role, setRole] = useState('');
-    const [show, setShow] = useState(true);
+ 
 
     const onFinish = async (userData) => {
         console.log('Received values of form: ', userData);
@@ -40,7 +33,6 @@ const RegisterUser = () => {
                 email,
                 password,
                 password_confirmation,
-                role,
             });
 
             console.log('User', user);
