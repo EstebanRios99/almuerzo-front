@@ -3,6 +3,7 @@ import {Button, message, Skeleton, Card, Table, Col, Row, Input, Form} from 'ant
 import {useRegisters} from '../data/useRegisters';
 import ShowError from './ShowError';
 import {useAuth} from "../providers/Auth";
+import moment from 'moment';
 import ColumnGroup from 'antd/lib/table/ColumnGroup';
 import Column from 'antd/lib/table/Column';
 import API from '../data/index';
@@ -15,30 +16,41 @@ import {translateMessage} from '../utils/translateMessage';
 const RegistersList = (props) => {
 
     const { Search } = Input;
+    const [identification, setIdentification]=useState('');
+    const [iden, setIden]=useState('');
     const {currentUser} = useAuth();
     const {employsRegisters, isLoading, isError, mutate} = useRegisters();
     
     const onFinish = async (registerData) => {
         console.log('Received values of form: ', registerData);
-        const {checkIn, checkOut, employ_id} = registerData;
+        const {checkIn, checkOut, id} = registerData;
+         setIdentification(id);
+         
         const test = employsRegisters[employsRegisters.length-1];
 
+        console.log('identification',identification);
+        
         try {
-            if(checkOut==="")
+            if(iden!==identification)
             {
-                const register = await API.post('/registers', {
-                checkIn,
+                const register = await API.post(`/employ/${identification}/registers`, {
+                checkIn : moment().format('HH:mm:ss'), 
                 checkOut,
-                employ_id,
                 });
+                Form.resetFields();
                 console.log('employ_register', register);
                 console.log('employ', test);
+                console.log('iden',iden);
+                setIden(id);
+                setIdentification('')
+                console.log('iden',iden);
             }else{
-                await API.put(`/registers/${test.id}`, {
+                await API.put(`/employ/${identification}/registers/${test.id}`, {
                     checkIn,
-                    checkOut,
-                    employ_id,
+                    checkOut : moment().format('HH:mm:ss'),
                     });
+                    setIdentification('')
+                    console.log('iden',iden);
             }
             afterCreate();
 
@@ -94,16 +106,8 @@ const RegistersList = (props) => {
         <Form
             onFinish={onFinish}
         >
-            <Form.Item name='checkIn'>
-                <Input type="time" placeholder="Ingreso" />
-            </Form.Item>
-
-            <Form.Item name='checkOut'>
-                <Input type="time" placeholder="Salida" />
-            </Form.Item>
-
-            <Form.Item name='employ_id'>
-                <Input type="number" placeholder="Empleado" />
+            <Form.Item name='id'>
+                <Input type="text" placeholder="Empleado" />
             </Form.Item>
 
             <Form.Item>
