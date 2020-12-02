@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Button, message, Skeleton, Card, Table, Col, Row, Input, Form} from 'antd';
 import {useRegisters} from '../data/useRegisters';
 import ShowError from './ShowError';
-import {useAuth} from "../providers/Auth";
 import moment from 'moment';
 import ColumnGroup from 'antd/lib/table/ColumnGroup';
 import Column from 'antd/lib/table/Column';
@@ -15,12 +14,50 @@ import {translateMessage} from '../utils/translateMessage';
 
 const RegistersList = (props) => {
 
-    const { Search } = Input;
+    
+    const[form]=Form.useForm();
     const [identification, setIdentification]=useState('');
     const [iden, setIden]=useState('');
-    const {currentUser} = useAuth();
     const {employsRegisters, isLoading, isError, mutate} = useRegisters();
     
+    const change =()=>{
+        let ID=document.querySelector( '#id' ).value;
+        setIdentification(ID);
+        onCreate();
+    }
+    const onCreate = async values => {
+        console.log('Received values of form: ', values);
+        
+        form.validateFields().then(async (values)=>{
+            console.log('values',values)
+            
+            const data = new FormData();
+            data.append('name', values.id);
+            console.log("values.id",values.id)
+            console.log('datos',data);
+            
+            console.log('id', identification);
+            try {
+                await API.post(`/employ/${identification}/registers`, {
+                    checkIn : moment().format('HH:mm:ss'), 
+                    checkOut : null,
+                    });
+                    form.resetFields();
+                    setIdentification(null);
+                    afterCreate();
+                    
+
+            }catch(e){
+                const errorList = e.error && <ErrorList errors={e.error}/>;
+                    message.error(<>{translateMessage(e.message)}{errorList}</>);
+            }
+            
+        })
+        .catch(info=>{
+            console.log('Validate Failed:', info);
+        });
+    };
+
     const onFinish = async (registerData) => {
         console.log('Received values of form: ', registerData);
         const {checkIn, checkOut, id} = registerData;
@@ -104,20 +141,23 @@ const RegistersList = (props) => {
     return (
         <>
         <Form
-            onFinish={onFinish}
+            form={form}
+            //onFinish={change}
+            initialValues={{
+                remember: true,
+            }}
         >
             <Form.Item name='id'>
-                <Input type="text" placeholder="Empleado" />
+                <Input id="id" type="text" placeholder="Empleado" />
             </Form.Item>
 
             <Form.Item>
-            <Button type='primary' htmlType='submit' className='login-form-button'>
+            <Button type='primary' htmlType='submit' className='login-form-button' onClick={change}>
                 Agregar
             </Button>
             </Form.Item>
         </Form>
 
-            <Search placeholder="input search text"  enterButton  style={{ width: 700 }} size="middle"/>
             <br/>
             <br/>
             <Table dataSource={data} size="small"  bordered="true" color="primary">
