@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Button, message, Skeleton, Card, Table, Col, Row, Input, Form} from 'antd';
-import {useRegisters} from '../data/useRegisters';
+import {useEmployRegister} from '../data/useEmployRegister';
 import ShowError from './ShowError';
 import moment from 'moment';
 import ColumnGroup from 'antd/lib/table/ColumnGroup';
@@ -16,10 +16,12 @@ const RegistersList = (props) => {
 
     
     const[form]=Form.useForm();
-    const [identification, setIdentification]=useState('');
+    const [identification, setIdentification]=useState('6610946965');
     const [iden, setIden]=useState('');
-    const {employsRegisters, isLoading, isError, mutate} = useRegisters();
+    console.log(identification);
+    const {employsRegisters, isLoading, isError, mutate} = useEmployRegister(identification);
     
+    console.log(identification);
     const change =()=>{
         let ID=document.querySelector( '#id' ).value;
         setIdentification(ID);
@@ -79,7 +81,7 @@ const RegistersList = (props) => {
                 console.log('employ', test);
                 console.log('iden',iden);
                 setIden(id);
-                setIdentification('')
+                //setIdentification('')
                 console.log('iden',iden);
             }else{
                 await API.put(`/employ/${identification}/registers/${test.id}`, {
@@ -120,7 +122,7 @@ const RegistersList = (props) => {
     console.log('registros',employsRegisters)
 
     const afterCreate = async () => {
-        await mutate('/registers');
+        await mutate(`/employs/${identification}/registers`);
     };
 
     let data=null;
