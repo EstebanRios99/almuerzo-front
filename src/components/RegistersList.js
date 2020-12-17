@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Button, message, Skeleton, Card, Table, Col, Row, Input, Form} from 'antd';
 import {useEmployRegister} from '../data/useEmployRegister';
+import {useRegisters} from '../data/useRegisters';
 import ShowError from './ShowError';
 import moment from 'moment';
 import ColumnGroup from 'antd/lib/table/ColumnGroup';
@@ -16,16 +17,27 @@ const RegistersList = (props) => {
 
     
     const[form]=Form.useForm();
-    const [identification, setIdentification]=useState('6610946965');
-    const [iden, setIden]=useState('');
-    console.log(identification);
-    const {employsRegisters, isLoading, isError, mutate} = useEmployRegister(identification);
+    const [identification, setIdentification]=useState('7113104274');
+    const [iden, setIden]=useState('7113104274');
     
     console.log(identification);
+    
+    const {registers, isLoading, isError, mutate} = useRegisters();
+
+    const {employsRegisters, mutate1} = useEmployRegister(iden);
+    console.log( 'e',employsRegisters)
+
+    
+    console.log(identification);
+    
+    
+
     const change =()=>{
         let ID=document.querySelector( '#id' ).value;
         setIdentification(ID);
         onCreate();
+           
+        
     }
     const onCreate = async values => {
         console.log('Received values of form: ', values);
@@ -33,22 +45,44 @@ const RegistersList = (props) => {
         form.validateFields().then(async (values)=>{
             console.log('values',values)
             
+            
+            
             const data = new FormData();
             data.append('name', values.id);
             console.log("values.id",values.id)
             console.log('datos',data);
             
             console.log('id', identification);
+            setIden(identification);
+
+
             try {
-                await API.post(`/employ/${identification}/registers`, {
+                if(employsRegisters)
+                {
+                const lastRegister = employsRegisters[employsRegisters.length-1];
+                console.log('lasst', lastRegister);
+            
+                if (lastRegister.checkOut!==null){
+                    await API.post(`/employ/${identification}/registers`, {
                     checkIn : moment().format('HH:mm:ss'), 
                     checkOut : null,
                     });
                     form.resetFields();
+                    console.log('cambio',iden);
+                    setIdentification(null);
+                    afterCreate(); 
+                 }        
+                else{
+                    await API.put(`/employ/${identification}/registers/${lastRegister.id}`, {
+                    checkOut : moment().format('HH:mm:ss'),
+                    });
+                    form.resetFields();
+                    setIden(identification);
                     setIdentification(null);
                     afterCreate();
-                    
-
+                }
+               
+            } 
             }catch(e){
                 const errorList = e.error && <ErrorList errors={e.error}/>;
                     message.error(<>{translateMessage(e.message)}{errorList}</>);
@@ -65,7 +99,7 @@ const RegistersList = (props) => {
         const {checkIn, checkOut, id} = registerData;
          setIdentification(id);
          
-        const test = employsRegisters[employsRegisters.length-1];
+        const test = registers[registers.length-1];
 
         console.log('identification',identification);
         
@@ -119,15 +153,15 @@ const RegistersList = (props) => {
     if (isError) {
         return <ShowError error={isError}/>;
     }
-    console.log('registros',employsRegisters)
+    console.log('registros',registers)
 
     const afterCreate = async () => {
         await mutate(`/employs/${identification}/registers`);
     };
 
     let data=null;
-    if(employsRegisters){
-    data = employsRegisters.map((registers,index)=>{
+    if(registers){
+    data = registers.map((registers,index)=>{
         
         return{
             key: index,

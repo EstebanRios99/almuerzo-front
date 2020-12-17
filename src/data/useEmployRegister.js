@@ -6,8 +6,8 @@ export const useEmployRegister = (identification) => {
 
     return {
         employsRegisters: data && data.data,
-        isLoading: !error && !data,
-        isError: error,
+        isLoadings: !error && !data,
+        isErrors: error,
         mutate
     };
 };
