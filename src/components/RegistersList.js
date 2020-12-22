@@ -62,13 +62,14 @@ const RegistersList = (props) => {
                 const lastRegister = employsRegisters[employsRegisters.length-1];
                 console.log('lasst', lastRegister);
             
-                if (lastRegister.checkOut!==null){
+                if (lastRegister.checkOut!==null || lastRegister.employ.identification!==identification){
                     await API.post(`/employ/${identification}/registers`, {
                     checkIn : moment().format('HH:mm:ss'), 
                     checkOut : null,
                     });
                     form.resetFields();
                     console.log('cambio',iden);
+                    
                     setIdentification(null);
                     afterCreate(); 
                  }        
@@ -94,7 +95,7 @@ const RegistersList = (props) => {
         });
     };
 
-    const onFinish = async (registerData) => {
+    /*const onFinish = async (registerData) => {
         console.log('Received values of form: ', registerData);
         const {checkIn, checkOut, id} = registerData;
          setIdentification(id);
@@ -133,7 +134,7 @@ const RegistersList = (props) => {
             message.error(<>{translateMessage(e.message)}{errorList}</>);
         }
 
-    };
+    };*/
 
     if (isLoading) {
         return <Row>
